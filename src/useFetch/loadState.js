@@ -15,6 +15,7 @@ export const loadStates = async ({
     }
 
     setRelays(data.relay_states);
+    // console.log(data.relay_states)
 
     const roomsArray = data?.rooms_saved?.split(",");
     if (roomsArray) {

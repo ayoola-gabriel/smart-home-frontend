@@ -159,6 +159,8 @@ const Dashboard = () => {
       const updatedKey = Object.keys(data.updates)[0];
       const updatedValue = data.updates[updatedKey];
 
+      setRelays((prev) => ({ ...prev, ...data.updates }));
+
       setToggles((prev) => ({
         ...prev,
         [updatedKey]: {
