@@ -12,15 +12,15 @@ export default defineConfig({
   },
   plugin: [
   ],
-  build:{
-    rollupOptions: {
-      output:{
-        manualChunks:{
-          react:['react', 'react-dom'],
-          socketio:['socket.io-client'],
-          charts:['recharts'],
-        },
-      },
-    },
-  },
+  // build:{
+  //   rollupOptions: {
+  //     output:{
+  //       manualChunks:{
+  //         react:['react', 'react-dom'],
+  //         socketio:['socket.io-client'],
+  //         charts:['recharts'],
+  //       },
+  //     },
+  //   },
+  // },
 });
