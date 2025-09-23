@@ -17,11 +17,12 @@ import { Squares } from "react-activity";
 import DeviceOfflineMessage from "../components/cards/DeviceOffline";
 import { DeviceContext } from "../DeviceContext";
 import NoIDMessage from "../components/settings/NoIDMessage";
+import { loadStates } from "../useFetch/loadState";
 import "react-activity/dist/library.css";
 
-export const ENDPOINT = "https://smart-home-backend-fy58.onrender.com";
+// export const ENDPOINT = "https://smart-home-backend-fy58.onrender.com";
 
-// export const ENDPOINT = `http://127.0.0.1:5000`;
+export const ENDPOINT = `http://127.0.0.1:5000`;
 
 const Dashboard = () => {
   const { hardwareOnline, setHardwareOnline } = useContext(DeviceContext);
@@ -88,42 +89,21 @@ const Dashboard = () => {
     });
   };
 
-  const loadStates = () => {
-    fetch(`${ENDPOINT}/get-relay-states/${deviceID}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if ("error" in data) {
-          return;
-        }
-        setRelays(data.relay_states);
-
-        const roomsArray = data?.rooms_saved?.split(",");
-        roomsArray
-          ? setSelectedRooms(roomsArray)
-          : console.error("Failed to get rooms");
-
-        // Update toggles based on relay states
-        setToggles((prev) => {
-          const updated = { ...prev };
-          Object.keys(updated).forEach((key) => {
-            updated[key] = {
-              ...updated[key],
-              state: data.relay_states[key] || false, // fallback to false if not provided
-            };
-          });
-          return updated;
-        });
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }
+  useEffect(()=>{
+    loadStates({
+      ENDPOINT,
+      deviceID,
+      setRelays,
+      setSelectedRooms,
+      setToggles,
+      setLoading,
+    });
+  },[hardwareOnline])
 
   useEffect(() => {
     //listen for incoming messages from server
     setSocketInstance(socket);
     setLoading(true);
-
-    // loadStates();
 
     socket.on("connected_message", () => {
       setLoading(false);
@@ -132,7 +112,6 @@ const Dashboard = () => {
 
     socket.on("hardware_online", () => {
       setHardwareOnline(true);
-      loadStates();
     });
 
     let timeoutId;
@@ -141,7 +120,6 @@ const Dashboard = () => {
       setHardwareData(data);
       setCurrentTime(new Date());
       // console.log(data)
-      loadStates();
 
       const timestamp = new Date().toLocaleTimeString();
 
@@ -169,12 +147,12 @@ const Dashboard = () => {
       // Save back to localStorage
       localStorage.setItem("voltage-history", JSON.stringify(voltage_history));
       localStorage.setItem("current-history", JSON.stringify(current_history));
-    
-      if(timeoutId) clearTimeout(timeoutId);
 
-      timeoutId = setTimeout(()=>{
+      if (timeoutId) clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
         setHardwareOnline(false);
-      },20000)
+      }, 20000);
     });
 
     socket.on("toggle_ack_update", (data) => {
@@ -196,7 +174,7 @@ const Dashboard = () => {
       socket.off("hardware_update");
       socket.off("toggle_ack_update");
       socket.off("toggle_update");
-      if(timeoutId) clearTimeout(timeoutId);
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, []);
 
@@ -218,38 +196,45 @@ const Dashboard = () => {
             {/* <!-- Device Controls --> */}
             <div className="lg:col-span-2 mb-6">
               <DashboardCard>
-                <DeviceHeader active={ hardwareOnline? selectedRooms.length: '0'} all={8} />
-                {hardwareOnline? ((deviceID == "") ? (
-                  <NoIDMessage />
-                ) : selectedRooms.length === 0 ? (
-                  <NoDeviceMessage />
+                <DeviceHeader
+                  active={hardwareOnline ? selectedRooms.length : "0"}
+                  all={8}
+                />
+                {hardwareOnline ? (
+                  deviceID == "" ? (
+                    <NoIDMessage />
+                  ) : selectedRooms.length === 0 ? (
+                    <NoDeviceMessage />
+                  ) : (
+                    <DevicesCard>
+                      {devices.map((d) => (
+                        <li key={d.id}>
+                          <Room
+                            roomID={d.id}
+                            icon={d.icon}
+                            name={d.name}
+                            check={relays[d.id]}
+                            disable={toggles[d.id].syncing}
+                            status={
+                              toggles[d.id].syncing ? (
+                                <Squares />
+                              ) : toggles[d.id].state ? (
+                                "ON"
+                              ) : (
+                                "OFF"
+                              )
+                            }
+                            onChangeFn={(e) =>
+                              handleToggle(d.id, e.target.checked)
+                            }
+                          />
+                        </li>
+                      ))}
+                    </DevicesCard>
+                  )
                 ) : (
-                  <DevicesCard>
-                    {devices.map((d) => (
-                      <li key={d.id}>
-                        <Room
-                          roomID={d.id}
-                          icon={d.icon}
-                          name={d.name}
-                          check={relays[d.id]}
-                          disable={toggles[d.id].syncing}
-                          status={
-                            toggles[d.id].syncing ? (
-                              <Squares />
-                            ) : toggles[d.id].state ? (
-                              "ON"
-                            ) : (
-                              "OFF"
-                            )
-                          }
-                          onChangeFn={(e) =>
-                            handleToggle(d.id, e.target.checked)
-                          }
-                        />
-                      </li>
-                    ))}
-                  </DevicesCard>
-                )): <DeviceOfflineMessage retryFn={()=>loadStates()}/>}
+                  <DeviceOfflineMessage  />
+                )}
               </DashboardCard>
             </div>
 
