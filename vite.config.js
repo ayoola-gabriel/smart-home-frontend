@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { Socket } from 'socket.io'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -10,5 +11,16 @@ export default defineConfig({
     host:true,
   },
   plugin: [
-  ]
-})
+  ],
+  build:{
+    rollupOptions: {
+      output:{
+        manualChunks:{
+          react:['react', 'react-dom'],
+          socketio:['socket.io-client'],
+          charts:['recharts'],
+        },
+      },
+    },
+  },
+});
