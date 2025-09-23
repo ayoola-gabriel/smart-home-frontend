@@ -20,9 +20,9 @@ import NoIDMessage from "../components/settings/NoIDMessage";
 import { loadStates } from "../useFetch/loadState";
 import "react-activity/dist/library.css";
 
-// export const ENDPOINT = "https://smart-home-backend-fy58.onrender.com";
+export const ENDPOINT = "https://smart-home-backend-fy58.onrender.com";
 
-export const ENDPOINT = `http://127.0.0.1:5000`;
+// export const ENDPOINT = `http://127.0.0.1:5000`;
 
 const Dashboard = () => {
   const { hardwareOnline, setHardwareOnline } = useContext(DeviceContext);
