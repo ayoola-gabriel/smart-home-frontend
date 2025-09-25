@@ -14,11 +14,11 @@ import DeviceHeader from "../components/dashboard/DeviceHeader";
 import { io } from "socket.io-client";
 import MyActivity from "../components/MyActivity";
 import { Squares } from "react-activity";
-import DeviceOfflineMessage from "../components/cards/DeviceOffline";
-import { DeviceContext } from "../DeviceContext";
+import DeviceOfflineMessage from "../components/DeviceOffline";
+import { DeviceContext } from "../components/DeviceContext";
 import NoIDMessage from "../components/settings/NoIDMessage";
-import { loadStates } from "../useFetch/loadState";
-import PWAInstallPrompt from "../PWAInstallPrompt";
+import { loadStates } from "../utils/loadState";
+import PWAInstallPrompt from "../components/PWAInstallPrompt";
 import "react-activity/dist/library.css";
 
 export const ENDPOINT = "https://smart-home-backend-fy58.onrender.com";

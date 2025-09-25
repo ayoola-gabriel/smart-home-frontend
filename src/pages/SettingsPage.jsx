@@ -3,12 +3,12 @@ import DashboardCard from "../components/cards/DashboardCard";
 import ConfigHeader from "../components/settings/ConfigHeader";
 import { useState, useContext } from "react";
 import { availableRooms } from "../utils/availableRooms";
-import { DeviceContext } from "../DeviceContext";
+import { DeviceContext } from "../components/DeviceContext";
 import SelectedRoomsList from "../components/settings/SelectedRoomsList";
-import DeviceOfflineMessage from "../components/cards/DeviceOffline";
+import DeviceOfflineMessage from "../components/DeviceOffline";
 import { Spinner } from "react-activity";
 import { CheckCheck } from "lucide-react";
-import Alert from "../Alert";
+import Alert from "../components/Alert";
 import { ENDPOINT } from "./Dashboard";
 import "react-activity/dist/library.css";
 
