@@ -18,6 +18,7 @@ import DeviceOfflineMessage from "../components/cards/DeviceOffline";
 import { DeviceContext } from "../DeviceContext";
 import NoIDMessage from "../components/settings/NoIDMessage";
 import { loadStates } from "../useFetch/loadState";
+import PWAInstallPrompt from "../PWAInstallPrompt";
 import "react-activity/dist/library.css";
 
 export const ENDPOINT = "https://smart-home-backend-fy58.onrender.com";
@@ -262,6 +263,7 @@ const Dashboard = () => {
             <CurrentChart data={loadMeasurements("current-history")} />
             <VoltageChart data={loadMeasurements("voltage-history")} />
           </div>
+          <PWAInstallPrompt />
         </div>
       )}
     </div>
