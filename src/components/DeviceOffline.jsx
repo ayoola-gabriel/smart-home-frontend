@@ -1,5 +1,3 @@
-import React from "react";
-
 const DeviceOfflineMessage = ({retryFn}) => {
   return (
     <div id="deviceOfflineMessage" className="text-center py-12">

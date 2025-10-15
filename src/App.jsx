@@ -8,6 +8,7 @@ import {
 import MainLayout from './layout/MainLayout'
 import Dashboard from './pages/Dashboard'
 import SettingsPage from './pages/SettingsPage'
+import CountdownTimer from './pages/CountdownTimer'
 // import DashboardWs from './pages/DashboardWs'
 
 const router = createBrowserRouter(
@@ -15,6 +16,7 @@ const router = createBrowserRouter(
   <Route path='/' element={<MainLayout />}>
     <Route index element={<Dashboard />} />
     <Route path='/settings' element={<SettingsPage />} />
+    <Route path='/countdown' element={<CountdownTimer />} />
   </Route>)
 )
 const App = () => {

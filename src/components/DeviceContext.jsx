@@ -8,6 +8,7 @@ export const DeviceProvider = ({ children }) => {
   const [hardwareOnline, setHardwareOnline] = useState(false);
   const [selectedRooms, setSelectedRooms] = useState([]);
   const [deviceID, setDeviceID] = useState('')
+  const [username, setUsername] = useState('')
 
   return (
     <DeviceContext.Provider value={{ 
@@ -16,7 +17,9 @@ export const DeviceProvider = ({ children }) => {
       selectedRooms,
       setSelectedRooms,
       deviceID,
-      setDeviceID
+      setDeviceID,
+      username,
+      setUsername,
        }}>
       {children}
     </DeviceContext.Provider>

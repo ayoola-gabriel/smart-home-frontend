@@ -19,11 +19,11 @@ import { DeviceContext } from "../components/DeviceContext";
 import NoIDMessage from "../components/settings/NoIDMessage";
 import { loadStates } from "../utils/loadState";
 import PWAInstallPrompt from "../components/PWAInstallPrompt";
+import CountdownTimer from "./CountdownTimer";
+import { WifiOff } from "lucide-react";
 import "react-activity/dist/library.css";
 
 export const ENDPOINT = "https://smart-home-backend-fy58.onrender.com";
-
-// export const ENDPOINT = `http://127.0.0.1:5000`;
 
 const Dashboard = () => {
   const { hardwareOnline, setHardwareOnline } = useContext(DeviceContext);
@@ -43,9 +43,11 @@ const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [relays, setRelays] = useState({});
   const { selectedRooms, setSelectedRooms } = useContext(DeviceContext); //all
-
+  const [paymentMade, setPaymentMade] = useState(false)
+  const [enablePayment, setEnablePayment] = useState(true)
+  
   const deviceID = localStorage.getItem("device_id") || "";
-
+  
   const socket = io(`${ENDPOINT}/?device_id=${deviceID}`, {
     transports: ["websocket", "polling"],
     // query: { api_key: API_KEY }
@@ -90,6 +92,7 @@ const Dashboard = () => {
     });
   };
 
+
   useEffect(()=>{
     loadStates({
       ENDPOINT,
@@ -105,6 +108,10 @@ const Dashboard = () => {
     //listen for incoming messages from server
     setSocketInstance(socket);
     setLoading(true);
+
+    if(deviceID === '7d0f3f9a6f9b'){
+      setEnablePayment(true)
+    }
 
     socket.on("connected_message", () => {
       setLoading(false);
@@ -189,7 +196,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       {loading ? (
         <MyActivity />
-      ) : (
+      ) : ((enablePayment && !paymentMade)? <CountdownTimer continueTrial={()=>setPaymentMade(true)}/> : (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Header
             hardwareStatus={hardwareOnline}
@@ -265,7 +272,7 @@ const Dashboard = () => {
           </div>
           <PWAInstallPrompt />
         </div>
-      )}
+      ))}
     </div>
   );
 };

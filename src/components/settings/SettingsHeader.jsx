@@ -1,4 +1,4 @@
-import { ChevronsLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const SettingsHeader = () => {
@@ -6,8 +6,8 @@ const SettingsHeader = () => {
     <div className="mb-8">
       <div className="flex items-center">
         <Link to="/">
-        <button className="p-3 border rounded-lg me-2">
-          <ChevronsLeft />
+        <button className="p-1 rounded-lg me-2">
+          <ChevronLeft />
         </button>
         </Link>
         <div>

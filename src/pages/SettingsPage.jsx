@@ -19,6 +19,7 @@ const SettingsPage = () => {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const { deviceID, setDeviceID } = useContext(DeviceContext);
+  const {username, setUsername} = useContext(DeviceContext);
   const [showAlert, setShowAlert] = useState(false);
 
   const device_id = localStorage.getItem("device_id");
@@ -35,8 +36,15 @@ const SettingsPage = () => {
   };
 
   const handleSaveID = () => {
+    if(username) {
+      localStorage.setItem("username", username.split(' ')[0])
+    }
+
     if (deviceID.trim()) {
       localStorage.setItem("device_id", deviceID.trim());
+    }
+
+    if(username || deviceID) {
       setShowAlert(true);
     }
   };
@@ -54,10 +62,23 @@ const SettingsPage = () => {
               <div className="flex items-end space-x-4">
                 <div className="flex-1">
                   <label
+                    htmlFor="NameId"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Enter Your Name
+                  </label>
+                  <input
+                    type="text"
+                    id="NameId"
+                    placeholder="Enter your Name"
+                    className="w-full mb-5 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                  <label
                     htmlFor="homeId"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Smart Home ID
+                    Enter Your Smarthome ID
                   </label>
                   <input
                     type="text"
